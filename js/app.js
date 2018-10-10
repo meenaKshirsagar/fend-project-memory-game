@@ -11,6 +11,38 @@
  */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
+
+var picArray=["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-bomb","fa-leaf","fa-bicycle"];
+
+var ar1=picArray.slice();
+var ar2=picArray.slice();
+var clickedArray=[];
+
+function showMoves(score)
+{
+  var moves=document.getElementById('moves');
+  var text="";
+  if (moves){
+    if (score ==1){
+      text=score+" move";
+    }
+
+    else {
+      text=score+" moves";
+    }
+      moves.innerText=text;
+  }
+//  return(moves.innerText);
+}
+
+function init()
+{
+var score = 0;
+clickedArray=[];
+
+
+showMoves(score);
+
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -25,6 +57,114 @@ function shuffle(array) {
     return array;
 }
 
+
+shuffle(ar1);
+shuffle(ar2);
+
+var clickFunction = function (event)
+{
+var elem=event.target;
+/* if element picture visible (it has open/show class names in (i) then ignore the click */
+if (elem.classList.contains('open'))
+{
+  return;
+};
+if (elem.classList.contains('match'))
+{
+  return;
+};
+// it mean user clicke on something where picture is not shown
+
+if (clickedArray.length === 2) // timer in progress
+{
+  return;
+}
+
+// if this is first click t clickedArray.length == 0  -
+if (clickedArray.length == 0)
+{
+  elem.classList.add('open');
+  elem.classList.add('show');
+  clickedArray.push(elem);
+
+}
+else {
+  // check if it matches
+          if (clickedArray.length == 1)
+          {
+
+
+                if ((elem != clickedArray[0]) && (elem.getAttribute('name')== clickedArray[0].getAttribute('name')))
+                {
+                  // remove open and shown and add matched
+                      clickedArray[0].classList.remove('open');
+                      clickedArray[0].classList.remove('show');
+                      clickedArray[0].classList.add('match');
+                      elem.classList.add('match');
+                      score++;
+                      if (score == 8){
+                        alert("You solved the puzzle!");
+                      }
+                      showMoves(score);
+                      clickedArray=[];
+                }
+                  else {
+                      elem.classList.add('open');
+                      elem.classList.add('show');
+                      clickedArray.push(elem); // remeber this was clicked
+                  // set timer to remove both visibility;
+
+                      setTimeout(function () {
+
+                                clickedArray[0].classList.remove('open');
+                                clickedArray[0].classList.remove('show');
+                                clickedArray[1].classList.remove('open');
+                                clickedArray[1].classList.remove('show');
+                    // set array to null
+                                clickedArray=[];
+                              },1000);  // 2000 millisecond
+                    }
+            }
+    }
+
+}
+
+
+var ar3 = (ar1.concat(ar2));
+var ul = document.getElementById("deck")
+for
+  (var i=0; i <16; i++){
+    var list = document.createElement("li");
+    list.classList.add("card");
+
+  //    list.classList.add("open");
+    //  list.classList.add("show");
+
+      list.setAttribute('name',ar3[i]);
+    var iElem = document.createElement("i");
+    iElem.classList.add("fa");
+    iElem.classList.add(ar3[i]);
+
+    list.addEventListener("click", clickFunction,false );
+    list.appendChild(iElem);
+    console.log(list);
+    ul.appendChild(list);
+
+//  list.addEventListener("click", function(){ clickFunction(f);});
+  }
+}
+
+function reset()
+{
+  var ul = document.getElementById("deck")
+
+  while (ul.firstChild) {
+      ul.removeChild(ul.firstChild);
+  }
+  init();
+
+}
+init();
 
 /*
  * set up the event listener for a card. If a card is clicked:
