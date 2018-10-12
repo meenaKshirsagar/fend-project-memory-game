@@ -35,13 +35,46 @@ function showMoves(score)
 //  return(moves.innerText);
 }
 
+function computeDisplayStar(numMoves)
+{
+    var starCount=0;
+    if (numMoves <= 16)
+    {
+      starCount=3;
+    }
+    else if (numMoves <=24)
+    {
+      starCount=2;
+    }
+    else if (numMoves <=32)
+    {
+      starCount=1;
+    }
+
+    var starUI=document.getElementById('uistart');
+    while (starUI.firstChild) {
+        starUI.removeChild(starUI.firstChild);
+    }
+
+    for (i=0;i<starCount;i++)
+    {
+
+         starUI.innerHTML +='<li><i class="fa fa-star med-font"></i></li>';
+
+
+    }
+    return starCount;
+
+}
+var timer;
 function init()
 {
 var score = 0;
 clickedArray=[];
-
+var matches=0;
 
 showMoves(score);
+computeDisplayStar(score);
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -94,6 +127,13 @@ else {
           {
 
 
+              if (elem != clickedArray[0]) {
+
+                  score++;
+                  showMoves(score);
+                  computeDisplayStar(score);
+              }
+
                 if ((elem != clickedArray[0]) && (elem.getAttribute('name')== clickedArray[0].getAttribute('name')))
                 {
                   // remove open and shown and add matched
@@ -101,11 +141,34 @@ else {
                       clickedArray[0].classList.remove('show');
                       clickedArray[0].classList.add('match');
                       elem.classList.add('match');
-                      score++;
-                      if (score == 8){
-                        alert("You solved the puzzle!");
+                      matches++;
+                      if (matches == 8){
+                        var timeString=timer.getTimeValues();
+                        timer.pause();
+                        var starCount=computeDisplayStar(score);
+                        var resetChosen=swal({
+                            title: '<strong>You Solved the puzzle </strong>',
+                            type: 'info',
+                            html:
+                              'You took '+ score +' move/s'  +
+                              ' and time was '+ timeString +
+                              ' and star rating was '+starCount,
+                            showCloseButton: true,
+                            showCancelButton: true,
+                            focusConfirm: false,
+                            confirmButtonText:
+                              ' RESTART',
+
+                            cancelButtonText:
+                              'Done',
+
+                          });
+                          var btn=swal.getConfirmButton();
+                          btn.addEventListener("click", reset,false );
+
+
                       }
-                      showMoves(score);
+
                       clickedArray=[];
                 }
                   else {
@@ -152,6 +215,17 @@ for
 
 //  list.addEventListener("click", function(){ clickFunction(f);});
   }
+
+  // display easytimer
+if (!timer)
+{
+  timer = new Timer();
+timer.start();
+timer.addEventListener('secondsUpdated', function (e) {
+    document.getElementById('timer').innerText=timer.getTimeValues().toString();
+});
+}
+
 }
 
 function reset()
@@ -161,6 +235,7 @@ function reset()
   while (ul.firstChild) {
       ul.removeChild(ul.firstChild);
   }
+  timer.reset();
   init();
 
 }

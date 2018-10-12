@@ -21,13 +21,19 @@ body {
     font-family: 'Coda', cursive;
 }
 
+.timer
+{
+  padding-left:20px;
+}
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-
+.med-font{
+  font-size: 150%;
+}
 h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
@@ -38,11 +44,13 @@ h1 {
  */
 
 .deck {
-    width: 660px;
-    min-height: 680px;
+    width: 80vmin;
+    height:80vmin;
+    min-height:80vmin;
+
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
-    padding: 32px;
-    border-radius: 10px;
+    padding: 1vmin;
+    border-radius: vmin;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
     display: flex;
     flex-wrap: wrap;
@@ -52,18 +60,20 @@ h1 {
 }
 
 .deck .card {
-    height: 125px;
-    width: 125px;
+
+    width: 18vmin;
+    height:18vmin;
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
-    border-radius: 8px;
+    border-radius: 2vmin;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
+
 
 .deck .card.open {
     transform: rotateY(0);
