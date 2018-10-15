@@ -37,7 +37,7 @@ function showMoves(score)
 
 function computeDisplayStar(numMoves)
 {
-    var starCount=0;
+    var starCount=1;
     if (numMoves <= 16)
     {
       starCount=3;
@@ -46,7 +46,7 @@ function computeDisplayStar(numMoves)
     {
       starCount=2;
     }
-    else if (numMoves <=32)
+    else
     {
       starCount=1;
     }
@@ -100,19 +100,22 @@ var elem=event.target;
 /* if element picture visible (it has open/show class names in (i) then ignore the click */
 if (elem.classList.contains('open'))
 {
-  return;
+  return true;
 };
 if (elem.classList.contains('match'))
 {
-  return;
+  return true;
 };
 // it mean user clicke on something where picture is not shown
 
 if (clickedArray.length === 2) // timer in progress
 {
-  return;
+  return true;
 }
-
+if (elem.childElementCount == 0)
+{
+  return true;
+}
 // if this is first click t clickedArray.length == 0  -
 if (clickedArray.length == 0)
 {
@@ -189,7 +192,7 @@ else {
                     }
             }
     }
-
+return (true);
 }
 
 
@@ -205,6 +208,7 @@ for
 
       list.setAttribute('name',ar3[i]);
     var iElem = document.createElement("i");
+    iElem.addEventListener("click", function () {return true;},false );
     iElem.classList.add("fa");
     iElem.classList.add(ar3[i]);
 
